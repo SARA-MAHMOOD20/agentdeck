@@ -79,7 +79,11 @@ export class LlmService implements OnModuleInit {
   }
 
   async onModuleInit() {
-    await this.queue.init();
+    // Non-fatal: if the DB is unreachable we start from 0 (Google still enforces the real limit)
+    // so the app can boot and /health can report the problem.
+    await this.queue.init().catch((e: Error) =>
+      this.log.error(`Could not load today's LLM usage, starting from 0: ${e.message}`),
+    );
   }
 
   modelFor(tier: ModelTier): string {
