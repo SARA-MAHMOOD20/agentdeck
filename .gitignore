@@ -1,0 +1,30 @@
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+
+# WhatsApp / Baileys session data
+auth_info*/
+baileys_auth*/
+whatsapp-session*/
+*.session.json
+
+# Dependencies & build output
+node_modules/
+dist/
+build/
+.vite/
+coverage/
+*.tsbuildinfo
+
+# Logs & OS / editor files
+*.log
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Vercel / Supabase local
+.vercel
+supabase/.temp/
+supabase/.branches/

@@ -1,0 +1,25 @@
+# Local development: runs the API with hot reload inside a container.
+# The repo is mounted, so edits on your machine trigger a rebuild + restart.
+#   docker compose up        → API on http://localhost:3000
+# (Running natively with `pnpm dev` works too and is faster.)
+services:
+  api:
+    image: node:22-bookworm-slim
+    working_dir: /repo
+    command: >
+      sh -c "corepack enable &&
+             COREPACK_ENABLE_DOWNLOAD_PROMPT=0 pnpm install --frozen-lockfile &&
+             pnpm --filter @agentdeck/shared build &&
+             pnpm --filter @agentdeck/api dev"
+    env_file: .env
+    environment:
+      NODE_ENV: development
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/repo
+      - pnpm-store:/root/.local/share/pnpm/store
+    restart: unless-stopped
+
+volumes:
+  pnpm-store:
